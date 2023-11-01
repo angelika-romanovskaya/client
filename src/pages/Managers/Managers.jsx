@@ -35,7 +35,6 @@ function Managers({navigate}) {
   return (
     <div>
         <Link to="/managers/addManager">Добавить</Link>
-        <Link to="/">Главная</Link>
         {managers.map((item, i)=>
             <div key={i}>
                 <p>{item.name}</p>
