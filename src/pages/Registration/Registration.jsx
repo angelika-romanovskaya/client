@@ -11,14 +11,22 @@ function Registration({setRole, navigate, setLoginPassword}) {
     const [patronymic, setPatronymic] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
+    const [msg, setMsg] = useState('')
 
     const handleInput = ({ target: { value } }) => setPhone(value);
 
     const AddUser = ()=>{
-        Axios.post('http://localhost:9090/registration', {password: password, login: login, name: name, surname:surname, patronymic:patronymic, email: email, phone:phone})
-        setLoginPassword(login, password);
-        setRole("CLIENT");
-        navigate('/')
+        Axios.post('http://localhost:9090/registration', {password: password, login: login, name: name, surname:surname, patronymic:patronymic, email: email, phone:phone}).then((response)=>{
+            if(response.data.status === "success"){
+                setLoginPassword(login, password);
+                setRole("CLIENT");
+                navigate('/')
+            } else if(response.data.status === "duplicate"){
+                setMsg("Логин занят");
+            } else{
+                navigate('/error')
+            }
+        })
     };
     return (
         <div >
@@ -30,6 +38,7 @@ function Registration({setRole, navigate, setLoginPassword}) {
             <input type="text" placeholder='Введите логин' onChange={(event)=>{setPassword(event.target.value)}}/>
             <input type="password" placeholder='Придумайте пароль' onChange={(event)=>{setLogin(event.target.value)}}/>
             <button onClick={AddUser}>Зарегистрироваться</button>
+            <p>{msg}</p>
         </div>
     )
 }
