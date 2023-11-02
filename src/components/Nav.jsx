@@ -21,6 +21,7 @@ function Nav({role, setRole, navigate}) {
                     role === "ADMIN" ? (
                         <>
                             <Link to="/">Главная</Link>
+                            <Link to="/person">Личный кабинет</Link>
                             <Link to="/managers">Менеджеры</Link>
                             <button onClick={()=>{setRole(''); navigate('/')}}>Выйти</button>
                         </>

@@ -26,11 +26,11 @@ function Person({role, password, login, navigate, setLoginPassword}) {
         Axios.post('http://localhost:9090/getpersoninfo', {role: role, password: password, login:login}).then((response)=>{
             if(response.data.status === "success") {
                 setId(response.data.info.id)
-                setPhone(response.data.info.phone)
-                setName(response.data.info.name)
-                setSurname(response.data.info.surname)
-                setPatronymic(response.data.info.patronymic)
-                setEmail(response.data.info.email)
+                setPhone(response.data.info?.phone)
+                setName(response.data.info?.name)
+                setSurname(response.data.info?.surname)
+                setPatronymic(response.data.info?.patronymic)
+                setEmail(response.data.info?.email)
                 setLogins(response.data.info.login)
                 setPasswords(response.data.info.password)
             }
@@ -59,8 +59,17 @@ function Person({role, password, login, navigate, setLoginPassword}) {
                     navigate('/error')
                 };
             })
-        } else{
+        } else if(role === "MANAGER"){
             Axios.post('http://localhost:9090/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname, phone: phone}).then((response)=>{
+                if(response.data.status === "success") {
+                    setLoginPassword(logins, passwords);
+                }
+                else{
+                    navigate('/error')
+                };
+            })
+        } else{
+            Axios.post('http://localhost:9090/updatepersoninfo', {id:id, role: role, password: passwords, login: logins}).then((response)=>{
                 if(response.data.status === "success") {
                     setLoginPassword(logins, passwords);
                 }
@@ -74,15 +83,25 @@ function Person({role, password, login, navigate, setLoginPassword}) {
 
   return (
     <div>
-        <input disabled = {disabled} type='text' value={name} onChange={nameInput}/>
-        <input disabled = {disabled} type='text' value={surname} onChange={surnameInput}/>
-        {role === "CLIENT" ? (
-            <>
-                <input disabled = {disabled} type='text' value={patronymic} onChange={patronymicInput}/>
-                <input disabled = {disabled} type='email' value={email} onChange={emailInput}/>
-            </>
-        ) : (<></>)}
-        <PhoneInput disabled = {disabled} value={phone} onChange={phoneInput}/>
+        {role === "ADMIN" ? (
+            <></>
+        ) : (
+            role === "CLIENT" ? (
+                <>
+                    <input disabled = {disabled} type='text' value={name} onChange={nameInput}/>
+                    <input disabled = {disabled} type='text' value={surname} onChange={surnameInput}/>
+                    <input disabled = {disabled} type='text' value={patronymic} onChange={patronymicInput}/>
+                    <input disabled = {disabled} type='email' value={email} onChange={emailInput}/>
+                    <PhoneInput disabled = {disabled} value={phone} onChange={phoneInput}/>
+                </>
+            ) : (
+                <>
+                    <input disabled = {disabled} type='text' value={name} onChange={nameInput}/>
+                    <input disabled = {disabled} type='text' value={surname} onChange={surnameInput}/>
+                    <PhoneInput disabled = {disabled} value={phone} onChange={phoneInput}/>
+                </>
+            )
+        )}
         <input disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
         <input disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
         <button onClick={updateInfo}>Редактировать</button>
