@@ -2,7 +2,7 @@ import Axios from 'axios'
 import React, { useState} from 'react'
 import { Link} from 'react-router-dom'
 
-function Authorization({setRole, navigate, setLoginPassword}) {
+function Authorization({setRole, setStatus, navigate, setLoginPassword}) {
     const [password, setPassword] = useState('')
     const [login, setLogin] = useState('')
     const [msg, setMsg] = useState('')
@@ -10,12 +10,21 @@ function Authorization({setRole, navigate, setLoginPassword}) {
     const Auth = ()=>{
         Axios.post('http://localhost:9090/login', {password: password, login: login}).then((response)=>{
             if(response.data.status === "success") {
-                setRole(response.data.role);
-                navigate('/')
-                setLoginPassword(login, password);
+                if(response.data?.client_status === "active"){
+                    navigate('/')
+                    setLoginPassword(login, password);
+                    setRole(response.data.role);
+                } else if(response.data?.client_status === "blocked"){
+                    setMsg("Ваш аккаунт был заблокирован! Для разблокировки обратитесь в службу поддержки!");
+                } else if(response.data?.client_status === "deleted"){
+                    setMsg("Ваш аккаунт был удален! Желаете вернуть аккаунт?");
+                } else{
+                    setRole(response.data.role);
+                    navigate('/')
+                    setLoginPassword(login, password);
+                }
             }
             else if(response.data.status === "not found"){
-                // navigate('/registration')
                 setMsg("Пользователь не найден! Пройдите регистрацию или проверьте ввод логина и пароля!")
             } else{
                 navigate('/error')

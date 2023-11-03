@@ -9,9 +9,11 @@ import Managers from './pages/Managers/Managers';
 import AddManager from './pages/Managers/AddManager/AddManager';
 import Person from './pages/Person/Person';
 import Nav from './components/Nav';
+import Clients from './pages/Clients/Clients';
 
 function App() {
   const [role, setRole] = useState('');
+  const [status, setStatus] = useState('');
   const navigate = useNavigate();
   const [password, setPassword] = useState('')
   const [login, setLogin] = useState('')
@@ -27,11 +29,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home role={role} setRole={setRole} navigate = {navigate}/>} />
         <Route path="/registration" element={<Registration setRole={setRole} navigate = {navigate} setLoginPassword ={setLoginPassword}/>} />
-        <Route path="/authorization" element={<Authorization setRole={setRole} navigate = {navigate} setLoginPassword ={setLoginPassword}/>} />
+        <Route path="/authorization" element={<Authorization setRole={setRole} setStatus={setStatus} navigate = {navigate} setLoginPassword ={setLoginPassword}/>} />
         <Route path='/bid' element={<Bid/>}/>
         <Route path='/managers' element={<Managers navigate = {navigate}/>}/>
         <Route path='/managers/addManager' element={<AddManager navigate = {navigate}/>}/>
-        <Route path='/person' element={<Person role={role} password={password} navigate = {navigate} login={login} setLoginPassword ={setLoginPassword}/>}/>
+        <Route path='/person' element={<Person role={role} setRole={setRole} password={password} navigate = {navigate} login={login} setLoginPassword ={setLoginPassword}/>}/>
+        <Route path='/clients' element={<Clients navigate = {navigate}/>}/>
       </Routes>
     </div>
   );

@@ -23,6 +23,7 @@ function Nav({role, setRole, navigate}) {
                             <Link to="/">Главная</Link>
                             <Link to="/person">Личный кабинет</Link>
                             <Link to="/managers">Менеджеры</Link>
+                            <Link to="/clients">Клиенты</Link>
                             <button onClick={()=>{setRole(''); navigate('/')}}>Выйти</button>
                         </>
                     ) : (

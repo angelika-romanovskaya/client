@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Axios from 'axios'
 import PhoneInput from '../../components/PhoneInput'
 
-function Person({role, password, login, navigate, setLoginPassword}) {
+function Person({role, password, login, navigate, setLoginPassword, setRole}) {
     const [id, setId] = useState('');
     const [disabled, setDisabled] = useState(true);
     const [passwords, setPasswords] = useState('')
@@ -49,7 +49,6 @@ function Person({role, password, login, navigate, setLoginPassword}) {
     }
 
     const saveInfo = () =>{
-        console.log(logins, name);
         if(role === "CLIENT"){
             Axios.post('http://localhost:9090/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname,patronymic: patronymic, phone: phone, email: email}).then((response)=>{
                 if(response.data.status === "success") {
@@ -81,6 +80,19 @@ function Person({role, password, login, navigate, setLoginPassword}) {
         setDisabled(true);
     }
 
+    const deleteClient = ()=>{
+        Axios.post('http://localhost:9090/deleteClient', {id:id}).then((response)=>{
+                if(response.data.status === "success") {
+                    navigate('/')
+                    setLoginPassword('', '');
+                    setRole('')
+                }
+                else{
+                    navigate('/error')
+                };
+            })
+    }
+
   return (
     <div>
         {role === "ADMIN" ? (
@@ -93,6 +105,7 @@ function Person({role, password, login, navigate, setLoginPassword}) {
                     <input disabled = {disabled} type='text' value={patronymic} onChange={patronymicInput}/>
                     <input disabled = {disabled} type='email' value={email} onChange={emailInput}/>
                     <PhoneInput disabled = {disabled} value={phone} onChange={phoneInput}/>
+                    <button onClick={deleteClient}>Удалить аккаунт</button>
                 </>
             ) : (
                 <>
