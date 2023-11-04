@@ -32,6 +32,29 @@ function Authorization({setRole, setStatus, navigate, setLoginPassword}) {
         })
     };
 
+    const Yes = ()=>{
+        Axios.post('http://localhost:9090/restoreClient', {password: password, login: login}).then((response)=>{
+            if(response.data.status === "success") {
+                navigate('/')
+                setLoginPassword(login, password);
+                setRole(response.data.role);
+            }
+            else{
+                navigate('/error')
+            };
+        })
+    }
+
+    const No = ()=>{
+        setMsg("");
+        navigate('/authorization')
+    }
+
+    const Registration = ()=>{
+        navigate('/registration')
+    }
+
+
   return (
     <div>
         <Link to="/registration">Зарегистрироваться</Link>
@@ -39,6 +62,15 @@ function Authorization({setRole, setStatus, navigate, setLoginPassword}) {
         <input type="password" placeholder='Введите пароль' onChange={(event)=>{setLogin(event.target.value)}}/>
         <button onClick={() => Auth()}>Войти</button>
         <p>{msg}</p>
+        {msg === "Ваш аккаунт был удален! Желаете вернуть аккаунт?" ? (
+            <>
+                <button onClick={() => Yes()}>Да</button>
+                <button onClick={() => No()}>Нет</button>
+                <button onClick={() => Registration()}>Зарегистрировать новый</button>
+            </>
+        ) : (
+            <></>
+        )}
     </div>
   )
 }

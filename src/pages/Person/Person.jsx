@@ -82,15 +82,15 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
 
     const deleteClient = ()=>{
         Axios.post('http://localhost:9090/deleteClient', {id:id}).then((response)=>{
-                if(response.data.status === "success") {
-                    navigate('/')
-                    setLoginPassword('', '');
-                    setRole('')
-                }
-                else{
-                    navigate('/error')
-                };
-            })
+            if(response.data.status === "success") {
+                navigate('/')
+                setLoginPassword('', '');
+                setRole('')
+            }
+            else{
+                navigate('/error')
+            };
+        })
     }
 
   return (
