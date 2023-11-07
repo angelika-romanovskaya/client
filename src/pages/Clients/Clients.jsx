@@ -42,7 +42,11 @@ function Clients({navigate}) {
                 <p>{item.patronymic}</p>
                 <p>{item.email}</p>
                 <p>{item.phone}</p>
-                <button onClick={(event) => {blockedClient(event, item.id)}}>Заблокировать</button>
+                {item.status === "active" ? (
+                    <>
+                        <button onClick={(event) => {blockedClient(event, item.id)}}>Заблокировать</button>
+                    </>
+                ):(<></>)}
             </div>
         )}
     </div>

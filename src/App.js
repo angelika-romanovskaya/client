@@ -10,6 +10,7 @@ import AddManager from './pages/Managers/AddManager/AddManager';
 import Person from './pages/Person/Person';
 import Nav from './components/Nav';
 import Clients from './pages/Clients/Clients';
+import Error from './pages/Error/Error';
 
 function App() {
   const [role, setRole] = useState('');
@@ -27,6 +28,7 @@ function App() {
     <div className="App">
       <Nav role={role} setRole={setRole} navigate={navigate}/>
       <Routes>
+        <Route path='/error' element={<Error/>}/>
         <Route path="/" element={<Home role={role} setRole={setRole} navigate = {navigate}/>} />
         <Route path="/registration" element={<Registration setRole={setRole} navigate = {navigate} setLoginPassword ={setLoginPassword}/>} />
         <Route path="/authorization" element={<Authorization setRole={setRole} setStatus={setStatus} navigate = {navigate} setLoginPassword ={setLoginPassword}/>} />

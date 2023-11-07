@@ -117,8 +117,8 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
         )}
         <input disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
         <input disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
-        <button onClick={updateInfo}>Редактировать</button>
-        <button onClick={saveInfo}>Сохранить</button>
+        <button id='update-btn' disabled = {!disabled} onClick={updateInfo}>Редактировать</button>
+        <button id='save-btn' disabled = {disabled} onClick={saveInfo}>Сохранить</button>
     </div>
   )
 }
