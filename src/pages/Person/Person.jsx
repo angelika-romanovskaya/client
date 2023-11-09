@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Axios from 'axios'
 import PhoneInput from '../../components/PhoneInput'
+import Canvas from '../Canvas/Canvas';
 
 function Person({role, password, login, navigate, setLoginPassword, setRole}) {
     const [id, setId] = useState('');
@@ -12,6 +13,7 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
     const [patronymic, setPatronymic] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
+    const [blob, setBlob] = useState('');
 
     const phoneInput = ({ target: { value } }) => setPhone(value);
     const nameInput = ({ target: { value } }) => setName(value);
@@ -33,6 +35,7 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
                 setEmail(response.data.info?.email)
                 setLogins(response.data.info.login)
                 setPasswords(response.data.info.password)
+                setBlob(response.data.info?.signature)
             }
             else{
                 navigate('/error')
@@ -96,7 +99,12 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
   return (
     <div>
         {role === "ADMIN" ? (
-            <></>
+            <>
+                <input disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
+                <input disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
+                <p>Оставьте подпись для подтверждения документов</p>
+                <Canvas id = {id} navigate={navigate} blob={blob}/>
+            </>
         ) : (
             role === "CLIENT" ? (
                 <>
@@ -105,6 +113,8 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
                     <input disabled = {disabled} type='text' value={patronymic} onChange={patronymicInput}/>
                     <input disabled = {disabled} type='email' value={email} onChange={emailInput}/>
                     <PhoneInput disabled = {disabled} value={phone} onChange={phoneInput}/>
+                    <input disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
+                    <input disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
                     <button onClick={deleteClient}>Удалить аккаунт</button>
                 </>
             ) : (
@@ -112,11 +122,13 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
                     <input disabled = {disabled} type='text' value={name} onChange={nameInput}/>
                     <input disabled = {disabled} type='text' value={surname} onChange={surnameInput}/>
                     <PhoneInput disabled = {disabled} value={phone} onChange={phoneInput}/>
+                    <input disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
+                    <input disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
+                    <p>Оставьте подпись для подтверждения документов</p>
+                    <Canvas id = {id} navigate={navigate} blob={blob}/>
                 </>
             )
         )}
-        <input disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
-        <input disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
         <button id='update-btn' disabled = {!disabled} onClick={updateInfo}>Редактировать</button>
         <button id='save-btn' disabled = {disabled} onClick={saveInfo}>Сохранить</button>
     </div>

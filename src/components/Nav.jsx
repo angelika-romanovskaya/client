@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-function Nav({role, setRole, navigate}) {
+function Nav({role, setInfoNull, navigate}) {
     return (
         <div>
             {role === '' ? (
@@ -15,7 +15,7 @@ function Nav({role, setRole, navigate}) {
                         <Link to="/person">Личный кабинет</Link>
                         <Link to="/">Главная</Link>
                         <Link to="/bid">Заявки</Link>
-                        <button onClick={()=>{setRole(''); navigate('/')}}>Выйти</button>
+                        <button onClick={()=>{setInfoNull(); navigate('/')}}>Выйти</button>
                     </>
                 ) : (
                     role === "ADMIN" ? (
@@ -24,14 +24,15 @@ function Nav({role, setRole, navigate}) {
                             <Link to="/person">Личный кабинет</Link>
                             <Link to="/managers">Менеджеры</Link>
                             <Link to="/clients">Клиенты</Link>
-                            <button onClick={()=>{setRole(''); navigate('/')}}>Выйти</button>
+                            <button onClick={()=>{setInfoNull(); navigate('/')}}>Выйти</button>
                         </>
                     ) : (
                         <>
                             <Link to="/person">Личный кабинет</Link>
                             <Link to="/">Главная</Link>
                             <Link to="/bid">Заявки</Link>
-                            <button onClick={()=>{setRole(''); navigate('/')}}>Выйти</button>
+                            <Link to="/calls">Звонки</Link>
+                            <button onClick={()=>{setInfoNull(); navigate('/')}}>Выйти</button>
                         </>
                     )
                 )
