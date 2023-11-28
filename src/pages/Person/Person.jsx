@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Axios from 'axios'
-import PhoneInput from '../../components/PhoneInput'
-import Canvas from '../Canvas/Canvas';
+import PhoneInput from '../../components/PhoneInput/PhoneInput'
+import './person.css'
 
-function Person({role, password, login, navigate, setLoginPassword, setRole}) {
-    const [id, setId] = useState('');
+function Person({role, id, navigate, setUser, setRole}) {
     const [disabled, setDisabled] = useState(true);
     const [passwords, setPasswords] = useState('')
     const [logins, setLogins] = useState('')
@@ -13,7 +12,6 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
     const [patronymic, setPatronymic] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
-    const [blob, setBlob] = useState('');
 
     const phoneInput = ({ target: { value } }) => setPhone(value);
     const nameInput = ({ target: { value } }) => setName(value);
@@ -23,11 +21,9 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
     const passwordsInput = ({ target: { value } }) => setPasswords(value);
     const emailInput = ({ target: { value } }) => setEmail(value);
 
-
     const getInfo = ()=>{
-        Axios.post('http://localhost:9090/getpersoninfo', {role: role, password: password, login:login}).then((response)=>{
+        Axios.post('http://localhost:9090/getpersoninfo', {role: role, id:id}).then((response)=>{
             if(response.data.status === "success") {
-                setId(response.data.info.id)
                 setPhone(response.data.info?.phone)
                 setName(response.data.info?.name)
                 setSurname(response.data.info?.surname)
@@ -35,7 +31,6 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
                 setEmail(response.data.info?.email)
                 setLogins(response.data.info.login)
                 setPasswords(response.data.info.password)
-                setBlob(response.data.info?.signature)
             }
             else{
                 navigate('/error')
@@ -55,7 +50,7 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
         if(role === "CLIENT"){
             Axios.post('http://localhost:9090/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname,patronymic: patronymic, phone: phone, email: email}).then((response)=>{
                 if(response.data.status === "success") {
-                    setLoginPassword(logins, passwords);
+                    setUser(logins, passwords, id);
                 }
                 else{
                     navigate('/error')
@@ -64,7 +59,7 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
         } else if(role === "MANAGER"){
             Axios.post('http://localhost:9090/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname, phone: phone}).then((response)=>{
                 if(response.data.status === "success") {
-                    setLoginPassword(logins, passwords);
+                    setUser(logins, passwords, id);
                 }
                 else{
                     navigate('/error')
@@ -73,7 +68,7 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
         } else{
             Axios.post('http://localhost:9090/updatepersoninfo', {id:id, role: role, password: passwords, login: logins}).then((response)=>{
                 if(response.data.status === "success") {
-                    setLoginPassword(logins, passwords);
+                    setUser(logins, passwords, id);
                 }
                 else{
                     navigate('/error')
@@ -87,7 +82,7 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
         Axios.post('http://localhost:9090/deleteClient', {id:id}).then((response)=>{
             if(response.data.status === "success") {
                 navigate('/')
-                setLoginPassword('', '');
+                setUser('', '', '');
                 setRole('')
             }
             else{
@@ -97,40 +92,88 @@ function Person({role, password, login, navigate, setLoginPassword, setRole}) {
     }
 
   return (
-    <div>
+    <div className='person'>
         {role === "ADMIN" ? (
             <>
-                <input disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
-                <input disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
-                <p>Оставьте подпись для подтверждения документов</p>
-                <Canvas id = {id} navigate={navigate} blob={blob}/>
+                <div className='person__item'>
+                    <span className='person__type'>Логин:</span>
+                    <input className='person__value' disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
+                </div>
+                <div className='person__item'>
+                    <span className='person__type'>Пароль:</span>
+                    <input className='person__value'  disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
+                </div>
+                <div className='person__btn'>
+                    <button className='btn update-btn' id='update-btn' disabled = {!disabled} onClick={updateInfo}>Редактировать</button>
+                    <button className='btn save-btn' id='save-btn' disabled = {disabled} onClick={saveInfo}>Сохранить</button>
+                </div>
             </>
         ) : (
             role === "CLIENT" ? (
                 <>
-                    <input disabled = {disabled} type='text' value={name} onChange={nameInput}/>
-                    <input disabled = {disabled} type='text' value={surname} onChange={surnameInput}/>
-                    <input disabled = {disabled} type='text' value={patronymic} onChange={patronymicInput}/>
-                    <input disabled = {disabled} type='email' value={email} onChange={emailInput}/>
-                    <PhoneInput disabled = {disabled} value={phone} onChange={phoneInput}/>
-                    <input disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
-                    <input disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
-                    <button onClick={deleteClient}>Удалить аккаунт</button>
+                    <div className='person__item'>
+                        <span className='person__type'>Фамилия:</span>
+                        <input className='person__value' disabled = {disabled} type='text' value={surname} onChange={surnameInput}/>
+                    </div>
+                    <div className='person__item'>
+                        <span className='person__type'>Имя:</span>
+                        <input className='person__value' disabled = {disabled} type='text' value={name} onChange={nameInput}/>
+                    </div>
+                    <div className='person__item'>
+                        <span className='person__type'>Отчество:</span>
+                        <input className='person__value' disabled = {disabled} type='text' value={patronymic} onChange={patronymicInput}/>
+                    </div>
+                    <div className='person__item'>
+                        <span className='person__type'>E-mail:</span>
+                        <input className='person__value' disabled = {disabled} type='email' value={email} onChange={emailInput}/>
+                    </div>
+                    <div className='person__item'>
+                        <span className='person__type'>Телефон:</span>
+                        <PhoneInput className='person__value' disabled = {disabled} value={phone} onChange={phoneInput}/>
+                    </div>
+                    <div className='person__item'>
+                        <span className='person__type'>Логин:</span>
+                        <input className='person__value' disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
+                    </div>
+                    <div className='person__item'>
+                        <span className='person__type'>Пароль:</span>
+                        <input className='person__value'  disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
+                    </div>
+                    <div className='person__btn'>
+                        <button className='btn delete-btn' onClick={deleteClient}>Удалить</button>
+                        <button className='btn update-btn' id='update-btn' disabled = {!disabled} onClick={updateInfo}>Редактировать</button>
+                        <button className='btn save-btn' id='save-btn' disabled = {disabled} onClick={saveInfo}>Сохранить</button>
+                    </div>
                 </>
             ) : (
                 <>
-                    <input disabled = {disabled} type='text' value={name} onChange={nameInput}/>
-                    <input disabled = {disabled} type='text' value={surname} onChange={surnameInput}/>
-                    <PhoneInput disabled = {disabled} value={phone} onChange={phoneInput}/>
-                    <input disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
-                    <input disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
-                    <p>Оставьте подпись для подтверждения документов</p>
-                    <Canvas id = {id} navigate={navigate} blob={blob}/>
+                    <div className='person__item'>
+                        <span className='person__type'>Фамилия:</span>
+                        <input className='person__value' disabled = {disabled} type='text' value={surname} onChange={surnameInput}/>
+                    </div>
+                    <div className='person__item'>
+                        <span className='person__type'>Имя:</span>
+                        <input className='person__value' disabled = {disabled} type='text' value={name} onChange={nameInput}/>
+                    </div>
+                    <div className='person__item'>
+                        <span className='person__type'>Телефон:</span>
+                        <PhoneInput className='person__value' disabled = {disabled} value={phone} onChange={phoneInput}/>
+                    </div>
+                    <div className='person__item'>
+                        <span className='person__type'>Логин:</span>
+                        <input className='person__value' disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
+                    </div>
+                    <div className='person__item'>
+                        <span className='person__type'>Пароль:</span>
+                        <input className='person__value'  disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
+                    </div>
+                    <div className='person__btn'>
+                        <button className='btn update-btn' id='update-btn' disabled = {!disabled} onClick={updateInfo}>Редактировать</button>
+                        <button className='btn save-btn' id='save-btn' disabled = {disabled} onClick={saveInfo}>Сохранить</button>
+                    </div>
                 </>
             )
         )}
-        <button id='update-btn' disabled = {!disabled} onClick={updateInfo}>Редактировать</button>
-        <button id='save-btn' disabled = {disabled} onClick={saveInfo}>Сохранить</button>
     </div>
   )
 }

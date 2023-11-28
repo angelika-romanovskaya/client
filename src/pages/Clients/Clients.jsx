@@ -31,6 +31,18 @@ function Clients({navigate}) {
         })
     }
 
+    const unblockedClient = (event, id)=>{
+        event.preventDefault();
+        Axios.post('http://localhost:9090/unblockedClient', {id: id}).then((response)=>{
+            if(response.data.status === "success"){
+                navigate('/clients')
+                getClients();
+            } else{
+                navigate('/error')
+            }
+        })
+    }
+
   return (
     <div>
         {clients.map((item, i)=>
@@ -46,7 +58,11 @@ function Clients({navigate}) {
                     <>
                         <button onClick={(event) => {blockedClient(event, item.id)}}>Заблокировать</button>
                     </>
-                ):(<></>)}
+                ):(item.status === "blocked" ?
+                <>
+                    <button onClick={(event) => {unblockedClient(event, item.id)}}>Разблокировать</button>
+                </> : <></>
+                )}
             </div>
         )}
     </div>

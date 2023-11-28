@@ -1,0 +1,54 @@
+.person{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.person__item{
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.person__type{
+    font-size: 20px;
+}
+
+.person__value{
+    padding: 5px 10px;
+    outline: none;
+}
+
+.person__btn{
+    display: flex;
+    gap:20px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn{
+    font-size: 16px;
+    border: none;
+    padding: 5px 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.delete-btn{
+    background-color: red;
+}
+
+.update-btn{
+    background-color: orange;
+}
+
+.save-btn{
+    background-color: green;
+}

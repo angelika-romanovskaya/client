@@ -1,0 +1,15 @@
+.top{
+    display: flex;
+    flex-direction: column;
+}
+
+.top__item{
+    display: flex;
+    margin-top:10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid black;
+}
+
+.top__item>p{
+    flex: 1 1 0;
+}

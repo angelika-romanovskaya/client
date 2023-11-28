@@ -1,0 +1,25 @@
+.nav{
+    display:flex;
+    flex-direction: column;
+    gap: 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 10000;
+    background-color: aliceblue;
+    box-shadow: 1px 1px 10px black;
+    padding: 20px 10px;
+    width: 200px;
+}
+
+.nav__item{
+    font-size: 18px;
+    text-decoration: none;
+    color: black;
+}
+
+.nav__item.active{
+    font-weight: bold;
+    font-size: 20px;
+}

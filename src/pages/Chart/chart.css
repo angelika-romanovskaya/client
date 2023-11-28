@@ -1,0 +1,10 @@
+.chart{
+    padding: 20px 100px;
+}
+
+.chart__wrap{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+   
+}

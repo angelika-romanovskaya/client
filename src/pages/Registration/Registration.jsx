@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState } from 'react';
 import Axios from 'axios'
-import PhoneInput from '../../components/PhoneInput';
+import PhoneInput from '../../components/PhoneInput/PhoneInput';
 
-function Registration({setRole, navigate, setLoginPassword}) {
+function Registration({setRole, navigate, setUser}) {
     const [password, setPassword] = useState('')
     const [login, setLogin] = useState('')
     const [name, setName] = useState('')
@@ -18,7 +18,7 @@ function Registration({setRole, navigate, setLoginPassword}) {
     const AddUser = ()=>{
         Axios.post('http://localhost:9090/registration', {password: password, login: login, name: name, surname:surname, patronymic:patronymic, email: email, phone:phone}).then((response)=>{
             if(response.data.status === "success"){
-                setLoginPassword(login, password);
+                setUser(login, password, response.data.id);
                 setRole("CLIENT");
                 navigate('/')
             } else if(response.data.status === "duplicate"){

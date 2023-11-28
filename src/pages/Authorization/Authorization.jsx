@@ -1,18 +1,19 @@
 import Axios from 'axios'
 import React, { useState} from 'react'
 import { Link} from 'react-router-dom'
+import './authorization.css'
 
-function Authorization({setRole, setStatus, navigate, setLoginPassword}) {
+function Authorization({setRole, navigate, setUser}) {
     const [password, setPassword] = useState('')
     const [login, setLogin] = useState('')
     const [msg, setMsg] = useState('')
 
     const Auth = ()=>{
-        Axios.post('http://localhost:9090/login', {password: password, login: login}).then((response)=>{
+        Axios.post('http://localhost:9090/app/user/login', {password: password, login: login}).then((response)=>{
             if(response.data.status === "success") {
                 if(response.data?.client_status === "active"){
                     navigate('/')
-                    setLoginPassword(login, password);
+                    setUser(login, password, response.data.id);
                     setRole(response.data.role);
                 } else if(response.data?.client_status === "blocked"){
                     setMsg("Ваш аккаунт был заблокирован! Для разблокировки обратитесь в службу поддержки!");
@@ -21,7 +22,7 @@ function Authorization({setRole, setStatus, navigate, setLoginPassword}) {
                 } else{
                     setRole(response.data.role);
                     navigate('/')
-                    setLoginPassword(login, password);
+                    setUser(login, password, response.data.id);
                 }
             }
             else if(response.data.status === "not found"){
@@ -36,7 +37,7 @@ function Authorization({setRole, setStatus, navigate, setLoginPassword}) {
         Axios.post('http://localhost:9090/restoreClient', {password: password, login: login}).then((response)=>{
             if(response.data.status === "success") {
                 navigate('/')
-                setLoginPassword(login, password);
+                setUser(login, password, response.data.id);
                 setRole(response.data.role);
             }
             else{
@@ -56,11 +57,11 @@ function Authorization({setRole, setStatus, navigate, setLoginPassword}) {
 
 
   return (
-    <div>
+    <div className='form'>
         <Link to="/registration">Зарегистрироваться</Link>
-        <input type="text" placeholder='Введите логин' onChange={(event)=>{setPassword(event.target.value)}}/>
-        <input type="password" placeholder='Введите пароль' onChange={(event)=>{setLogin(event.target.value)}}/>
-        <button onClick={() => Auth()}>Войти</button>
+        <input className='person__value'  type="text" placeholder='Введите логин' onChange={(event)=>{setPassword(event.target.value)}}/>
+        <input className='person__value'  type="password" placeholder='Введите пароль' onChange={(event)=>{setLogin(event.target.value)}}/>
+        <button className='btn save-btn' onClick={() => Auth()}>Войти</button>
         <p>{msg}</p>
         {msg === "Ваш аккаунт был удален! Желаете вернуть аккаунт?" ? (
             <>

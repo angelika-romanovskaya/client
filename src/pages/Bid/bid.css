@@ -1,0 +1,86 @@
+.bid{
+    padding: 50px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.bid__panel{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 10000;
+    background-color: aliceblue;
+    box-shadow: 1px 1px 10px black;
+    padding: 20px 10px;
+    width: 200px;
+}
+
+.bid__addLink{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.bid__btnSorts{
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-sort{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 24px;
+}
+
+.bid__item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px black solid;
+}
+
+.bid__info{
+    flex: 1 1 0;
+    text-align: left;
+    font-size: 18px;
+}
+
+.read-btn{
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: green;
+}
+
+.bid__filter{
+    padding: 5px 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.bid__option{
+    font-size: 16px;
+    padding: 5px 10px;
+}
+
+.reset-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    color: black !important;
+    font-size: 24px !important;
+}
