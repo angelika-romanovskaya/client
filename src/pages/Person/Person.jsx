@@ -22,7 +22,7 @@ function Person({role, id, navigate, setUser, setRole}) {
     const emailInput = ({ target: { value } }) => setEmail(value);
 
     const getInfo = ()=>{
-        Axios.post('http://localhost:9090/getpersoninfo', {role: role, id:id}).then((response)=>{
+        Axios.post('http://localhost:9090/app/person/getpersoninfo', {role: role, id:id}).then((response)=>{
             if(response.data.status === "success") {
                 setPhone(response.data.info?.phone)
                 setName(response.data.info?.name)
@@ -47,8 +47,9 @@ function Person({role, id, navigate, setUser, setRole}) {
     }
 
     const saveInfo = () =>{
-        if(role === "CLIENT"){
-            Axios.post('http://localhost:9090/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname,patronymic: patronymic, phone: phone, email: email}).then((response)=>{
+        console.log(role.role)
+        if(role.role === "CLIENT"){
+            Axios.post('http://localhost:9090/app/person/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname, patronymic: patronymic, phone: phone, email: email}).then((response)=>{
                 if(response.data.status === "success") {
                     setUser(logins, passwords, id);
                 }
@@ -56,8 +57,8 @@ function Person({role, id, navigate, setUser, setRole}) {
                     navigate('/error')
                 };
             })
-        } else if(role === "MANAGER"){
-            Axios.post('http://localhost:9090/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname, phone: phone}).then((response)=>{
+        } else if(role.role === "MANAGER"){
+            Axios.post('http://localhost:9090/app/person/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname, phone: phone}).then((response)=>{
                 if(response.data.status === "success") {
                     setUser(logins, passwords, id);
                 }
@@ -66,7 +67,7 @@ function Person({role, id, navigate, setUser, setRole}) {
                 };
             })
         } else{
-            Axios.post('http://localhost:9090/updatepersoninfo', {id:id, role: role, password: passwords, login: logins}).then((response)=>{
+            Axios.post('http://localhost:9090/app/person/updatepersoninfo', {id:id, role: role, password: passwords, login: logins}).then((response)=>{
                 if(response.data.status === "success") {
                     setUser(logins, passwords, id);
                 }
@@ -79,7 +80,7 @@ function Person({role, id, navigate, setUser, setRole}) {
     }
 
     const deleteClient = ()=>{
-        Axios.post('http://localhost:9090/deleteClient', {id:id}).then((response)=>{
+        Axios.post('http://localhost:9090/app/client/deleteClient', {id:id}).then((response)=>{
             if(response.data.status === "success") {
                 navigate('/')
                 setUser('', '', '');
@@ -93,7 +94,7 @@ function Person({role, id, navigate, setUser, setRole}) {
 
   return (
     <div className='person'>
-        {role === "ADMIN" ? (
+        {role.role === "ADMIN" ? (
             <>
                 <div className='person__item'>
                     <span className='person__type'>Логин:</span>
@@ -109,7 +110,7 @@ function Person({role, id, navigate, setUser, setRole}) {
                 </div>
             </>
         ) : (
-            role === "CLIENT" ? (
+            role.role === "CLIENT" ? (
                 <>
                     <div className='person__item'>
                         <span className='person__type'>Фамилия:</span>

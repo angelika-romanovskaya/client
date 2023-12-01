@@ -9,7 +9,7 @@ function ChartClientAdmin({navigate}) {
     let [client, setClient] = useState([]);
     let [countBid, setCountBid] = useState([]);
     let getChartClientAdmin = () =>{
-        Axios.get('http://localhost:9090/getChartClientAdmin').then((response)=>{
+        Axios.get('http://localhost:9090/app/statistic/getChartClientAdmin').then((response)=>{
           if(response.data.status === "success") {
               setClient(response.data.client);
               setCountBid(response.data.bid)

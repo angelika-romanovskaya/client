@@ -1,0 +1,18 @@
+.manager{
+    padding: 10px 150px;
+}
+
+.manager__wrap{
+    display: flex;
+    flex-direction: column;
+}
+
+.manager__item{
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.manager__item p {
+    flex: 1 1 0;
+}

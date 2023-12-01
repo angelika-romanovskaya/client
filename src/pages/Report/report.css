@@ -1,0 +1,14 @@
+.form__data{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 200px;
+}
+
+.form__data>div{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

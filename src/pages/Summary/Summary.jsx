@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import React, { useEffect, useLayoutEffect, useState } from 'react'
+import './summary.css'
 
 function Summary({navigate}) {
     const [managerInfo, setManagerInfo] = useState([]);
@@ -7,7 +8,7 @@ function Summary({navigate}) {
     const [sum, setSum] = useState(0);
 
     let getBid = () =>{
-        Axios.get('http://localhost:9090/summaryBid').then((response)=>{
+        Axios.get('http://localhost:9090/app/statistic/summaryBid').then((response)=>{
           if(response.data.status === "success") {
               setManagerInfo(response.data.manager);
               setClientInfo(response.data.client);
@@ -19,7 +20,7 @@ function Summary({navigate}) {
       }
 
       let getSum = () =>{
-        Axios.get('http://localhost:9090/sumPrice').then((response)=>{
+        Axios.get('http://localhost:9090/app/statistic/sumPrice').then((response)=>{
           if(response.data.status === "success") {
               setSum(response.data.sum.sum);
           }
@@ -35,27 +36,29 @@ function Summary({navigate}) {
       }, [])
 
   return (
-    <div>
+    <div className='summary'>
+      <p>Сводка по менеджерам</p>
         {managerInfo.map((item, i)=>
-            <div key={i}>
+            <div className='summary__item' key={i}>
                 <p>{item.name}</p>
                 <p>{item.surname}</p>
                 <p>{item.phone}</p>
-                <p>{item.sum.toFixed(2)}</p>
+                <p>{item.sum ? item.sum.toFixed(2) : 0}</p>
             </div>
         )}
         <hr/>
+        <p>Сводка по клиентам</p>
         {clientInfo.map((item, i)=>
-            <div key={i}>
+            <div  className='summary__item' key={i}>
                 <p>{item.name}</p>
                 <p>{item.surname}</p>
                 <p>{item.phone}</p>
                 <p>{item.email}</p>
-                <p>{item.sum.toFixed(2)}</p>
+                <p>{item.sum ? item.sum.toFixed(2) : 0}</p>
             </div>
         )}
         <hr/>
-        <p>Итого: <span>{sum.toFixed(2)}</span></p>
+        <p  className='summary__result'>Итого: <span>{sum ? sum.toFixed(2) : 0}</span></p>
     </div>
   )
 }

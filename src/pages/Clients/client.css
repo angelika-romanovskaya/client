@@ -1,0 +1,15 @@
+.client{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 100px;
+}
+
+.client__item{
+    display: flex;
+    gap: 10px;
+}
+
+.client__item p, .client__item button{
+    flex: 1 1 0;
+}

@@ -11,6 +11,7 @@ function Authorization({setRole, navigate, setUser}) {
     const Auth = ()=>{
         Axios.post('http://localhost:9090/app/user/login', {password: password, login: login}).then((response)=>{
             if(response.data.status === "success") {
+                console.log(response.data)
                 if(response.data?.client_status === "active"){
                     navigate('/')
                     setUser(login, password, response.data.id);
@@ -34,7 +35,7 @@ function Authorization({setRole, navigate, setUser}) {
     };
 
     const Yes = ()=>{
-        Axios.post('http://localhost:9090/restoreClient', {password: password, login: login}).then((response)=>{
+        Axios.post('http://localhost:9090/app/client/restoreClient', {password: password, login: login}).then((response)=>{
             if(response.data.status === "success") {
                 navigate('/')
                 setUser(login, password, response.data.id);
@@ -58,11 +59,12 @@ function Authorization({setRole, navigate, setUser}) {
 
   return (
     <div className='form'>
-        <Link to="/registration">Зарегистрироваться</Link>
+        <span className='msg'>Нет аккаунта? Не беда, кликни 'Зарегистрироваться'!</span>
+        <Link className='link' to="/registration">Зарегистрироваться</Link>
         <input className='person__value'  type="text" placeholder='Введите логин' onChange={(event)=>{setPassword(event.target.value)}}/>
         <input className='person__value'  type="password" placeholder='Введите пароль' onChange={(event)=>{setLogin(event.target.value)}}/>
         <button className='btn save-btn' onClick={() => Auth()}>Войти</button>
-        <p>{msg}</p>
+        <p className='msg'>{msg}</p>
         {msg === "Ваш аккаунт был удален! Желаете вернуть аккаунт?" ? (
             <>
                 <button onClick={() => Yes()}>Да</button>

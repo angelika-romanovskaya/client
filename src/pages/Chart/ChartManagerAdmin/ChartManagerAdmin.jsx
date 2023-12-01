@@ -10,7 +10,7 @@ function ChartManagerAdmin({navigate}) {
     let [countBid, setCountBid] = useState([]);
     
     let getChartManagerAdmin = () =>{
-        Axios.get('http://localhost:9090/getChartManagerAdmin').then((response)=>{
+        Axios.get('http://localhost:9090/app/statistic/getChartManagerAdmin').then((response)=>{
           if(response.data.status === "success") {
               setManager(response.data.manager);
               setCountBid(response.data.bid)

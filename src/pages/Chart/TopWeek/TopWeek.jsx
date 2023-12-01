@@ -9,7 +9,7 @@ function TopWeek({navigate}) {
         let dateStart = new Date();
         let dateEnd = new Date();
         dateEnd.setDate(dateEnd.getDate() - 7)
-        Axios.post('http://localhost:9090/topManagers', {dateStart: formatDate(dateStart), dateEnd : formatDate(dateEnd)}).then((response)=>{
+        Axios.post('http://localhost:9090/app/statistic/topManagers', {dateStart: formatDate(dateStart), dateEnd : formatDate(dateEnd)}).then((response)=>{
           if(response.data.status === "success") {
               setManager(response.data.manager);
           }

@@ -8,7 +8,7 @@ function Calls({navigate}) {
   const [calls, setCalls] = useState([]);
 
   let getBell = () =>{
-    Axios.get('http://localhost:9090/getbell').then((response)=>{
+    Axios.get('http://localhost:9090/app/bell/getbell').then((response)=>{
       if(response.data.status === "success") {
           setCalls(response.data.calls);
       }
@@ -24,7 +24,7 @@ function Calls({navigate}) {
 
   let deleteCall = (event, id)=>{
     event.preventDefault();
-    Axios.post('http://localhost:9090/deleteCalls', {id: id}).then((response)=>{
+    Axios.post('http://localhost:9090/app/bell/deleteCalls', {id: id}).then((response)=>{
       if(response.data.status === "success"){
           navigate('/calls')
           getBell();

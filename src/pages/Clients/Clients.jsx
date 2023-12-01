@@ -1,11 +1,12 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import './client.css'
 
 function Clients({navigate}) {
     const [clients, setClients] = useState([]);
 
     const getClients = ()=>{
-        Axios.get('http://localhost:9090/getclients').then((response)=>{
+        Axios.get('http://localhost:9090/app/client/getclients').then((response)=>{
             if(response.data.status === "success") {
                 setClients(response.data.clients);
             }
@@ -21,10 +22,10 @@ function Clients({navigate}) {
 
     const blockedClient = (event, id)=>{
         event.preventDefault();
-        Axios.post('http://localhost:9090/blockedClient', {id: id}).then((response)=>{
+        Axios.post('http://localhost:9090/app/client/blockedClient', {id: id}).then((response)=>{
             if(response.data.status === "success"){
-                navigate('/clients')
                 getClients();
+                navigate('/clients')
             } else{
                 navigate('/error')
             }
@@ -33,10 +34,10 @@ function Clients({navigate}) {
 
     const unblockedClient = (event, id)=>{
         event.preventDefault();
-        Axios.post('http://localhost:9090/unblockedClient', {id: id}).then((response)=>{
+        Axios.post('http://localhost:9090/app/client/unblockedClient', {id: id}).then((response)=>{
             if(response.data.status === "success"){
-                navigate('/clients')
                 getClients();
+                navigate('/clients')
             } else{
                 navigate('/error')
             }
@@ -44,9 +45,9 @@ function Clients({navigate}) {
     }
 
   return (
-    <div>
+    <div className='client'>
         {clients.map((item, i)=>
-            <div key={i}>
+            <div className='client__item' key={i}>
                 <p>{item.login}</p>
                 <p>{item.status}</p>
                 <p>{item.name}</p>
@@ -56,11 +57,11 @@ function Clients({navigate}) {
                 <p>{item.phone}</p>
                 {item.status === "active" ? (
                     <>
-                        <button onClick={(event) => {blockedClient(event, item.id)}}>Заблокировать</button>
+                        <button className='btn delete-btn' onClick={(event) => {blockedClient(event, item.id)}}>Заблокировать</button>
                     </>
                 ):(item.status === "blocked" ?
                 <>
-                    <button onClick={(event) => {unblockedClient(event, item.id)}}>Разблокировать</button>
+                    <button className='btn read-btn' onClick={(event) => {unblockedClient(event, item.id)}}>Разблокировать</button>
                 </> : <></>
                 )}
             </div>

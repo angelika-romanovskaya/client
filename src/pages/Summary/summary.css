@@ -1,0 +1,18 @@
+.summary{
+    padding: 20px 150px;
+}
+
+.summary__item{
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.summary__item p {
+    flex: 1 1 0;
+}
+
+.summary__result{
+    font-weight: bold;
+    font-size: 20px;
+}

@@ -7,7 +7,7 @@ import TopWeek from './TopWeek/TopWeek'
 function Chart({role, navigate}) {
   return (
     <div className='chart'>
-        {role === "ADMIN" ? (<div className='chart__wrap'>
+        {role.role === "ADMIN" ? (<div className='chart__wrap'>
             <TopWeek navigate={navigate}/>
             <ChartManagerAdmin navigate={navigate}/>
             <ChartClientAdmin navigate={navigate}/>

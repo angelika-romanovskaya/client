@@ -19,7 +19,7 @@ function Modal({login, password, navigate}) {
     }
 
     const addBell = ()=>{
-        Axios.post('http://localhost:9090/addBell', {password: password, login: login, theme: theme, phone: phone}).then((response)=>{
+        Axios.post('http://localhost:9090/app/bell/addBell', {password: password, login: login, theme: theme, phone: phone}).then((response)=>{
             if(response.data.status === "success") {}
             else{
                 navigate('/error')
@@ -31,7 +31,7 @@ function Modal({login, password, navigate}) {
   return (
     <div className='modal'>
         <button className='open--model' onClick={openModal}>open</button>
-        <ReactModal className='modal__window' isOpen={active} onRequestClose={closeModal}>
+        <ReactModal  overlayClassName="Overlay" className='modal__window' ariaHideApp={false} isOpen={active} onRequestClose={closeModal}>
             <button className='close--model' onClick={closeModal}>X</button>
             <div className='model__content'>
                 <h1 className='model__title'>Заказать звонок</h1>

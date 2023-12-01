@@ -1,0 +1,25 @@
+.ditails{
+    padding: 20px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.ditails__item{
+    display: flex;
+    align-items:  center;
+    justify-content: space-between;
+    width: 400px;
+    gap: 20px;
+}
+
+.ditails__type, .ditails__info{
+    flex: 1 1 0;
+    text-align: left;
+    font-size: 18px;
+}
+
+.ditails__type{
+    font-weight: bold;
+}

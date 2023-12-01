@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import jsPDF from 'jspdf'
 import  Axios from 'axios';
 import '../../font/TimesNewRomanRegular-normal'
+import './report.css'
 
 
 function Report({navigate}) {
@@ -12,7 +13,7 @@ function Report({navigate}) {
     const [bidStatus, setBidStatus] = useState('');
 
     let pdfGeneration = () =>{
-        Axios.post('http://localhost:9090/getReport', {start:start, end:end}).then((response)=>{
+        Axios.post('http://localhost:9090/app/statistic/getReport', {start:start, end:end}).then((response)=>{
             if(response.data.status === "success") {
                 setBid(response.data.bid);
                 setSumBid(response.data.sumBid);
@@ -47,7 +48,7 @@ function Report({navigate}) {
                 doc.text(`${element.fullname}`, 10, 70 + i*10)
                 doc.text(`${element.count}`, 50, 70 + i*10)
                 doc.text(`${element.type_user}`, 100, 70 + i*10)
-                doc.text(`${element.price.toFixed(2)}`, 150, 70 + i*10)
+                doc.text(`${element.price ? element.price.toFixed(2) : 0}`, 150, 70 + i*10)
                 doc.line(10, 75 + i*10, 200, 75 + i*10)
             });
         }
@@ -55,19 +56,19 @@ function Report({navigate}) {
     }
 
     return (
-        <div>
-            <div>
+        <div className='form'>
+            <div className='form__data'>
                 <div>
-                    <span>с</span>
-                    <input type="date" name="datestart" id="datestart" onChange={(event)=>{setDateStart(event.target.value)}}/>
+                    <span>с </span>
+                    <input className='person__value' type="date" name="datestart" id="datestart" onChange={(event)=>{setDateStart(event.target.value)}}/>
                 </div>
                 <div>
-                    <span>по</span>
-                    <input type="date" name="dateend" id="dateend" onChange={(event)=>{setDateEnd(event.target.value)}}/>
+                    <span>по </span>
+                    <input className='person__value' type="date" name="dateend" id="dateend" onChange={(event)=>{setDateEnd(event.target.value)}}/>
                 </div>
             </div>
-            <button onClick={()=>pdfGeneration()}>Сгенерировать PDF</button>
-            <button onClick={()=>pdfDownload()}>Download PDF</button>
+            <button className='btn update-btn' onClick={()=>pdfGeneration()}>Сгенерировать PDF</button>
+            <button className='btn read-btn' onClick={()=>pdfDownload()}>Download PDF</button>
         </div>
       )
 }

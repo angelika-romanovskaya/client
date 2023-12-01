@@ -5,15 +5,18 @@ import './bid.css'
 import { GrPowerReset } from "react-icons/gr";
 import { FaSortAlphaDown } from "react-icons/fa";
 import { FaSortAlphaUp } from "react-icons/fa";
+import { HiOutlineDocumentPlus } from "react-icons/hi2";
+import {saveAs} from 'file-saver'
 
 function Bid({role, id, navigate, setBid, bid}) {
   const filterOption = useRef();
   const [filterData, setFilterData] = useState([]);
 
   let getBid = () =>{
-    Axios.post('http://localhost:9090/getBid', {id:id, role:role}).then((response)=>{
+    Axios.post('http://localhost:9090/app/bid/getBid', {id:id, role:role}).then((response)=>{
       if(response.data.status === "success") {
           setBid(response.data.bid);
+          console.log(bid)
           setFilterData(response.data.bid)
       }
       else{
@@ -27,9 +30,10 @@ function Bid({role, id, navigate, setBid, bid}) {
   }, [id])
 
   let changeStatus = (id) =>{
-    Axios.post('http://localhost:9090/viewedBid', {id:id}).then((response)=>{
+    Axios.post('http://localhost:9090/app/bid/viewedBid', {id:id}).then((response)=>{
       if(response.data.status === "success") {
         navigate("/bid/details/" + id)
+        getBid();
       }
       else{
           navigate('/error')
@@ -38,12 +42,39 @@ function Bid({role, id, navigate, setBid, bid}) {
   }
 
   let deleteBid = (id) =>{
-    Axios.post('http://localhost:9090/deletedBid', {id:id}).then((response)=>{
+    Axios.post('http://localhost:9090/app/bid/deletedBid', {id:id}).then((response)=>{
       if(response.data.status === "success") {
         navigate("/bid")
+        getBid();
       }
       else{
           navigate('/error')
+      };
+    })
+  }
+
+  let createDocument = (id) =>{
+    Axios.post('http://localhost:9090/app/document/createDocument', {id:id}).then((response)=>{
+      if(response.data.status === "success") {
+        navigate("/bid")
+        getBid();
+      }
+      else{
+          navigate('/error')
+      };
+    })
+  }
+
+  let saveDocument = (id) =>{
+    Axios.post('http://localhost:9090/app/document/saveDocument', {id:id}, {responseType:'blob'}).then((response)=>{
+      if(response.data.status === "error") {
+        navigate('/error')
+      }
+      else{
+        console.log(response.data)
+        const pdfBlob = new Blob([response.data], {type: 'application/pdf'})
+        saveAs(pdfBlob, 'Doc.pdf')
+        navigate("/bid")
       };
     })
   }
@@ -72,7 +103,7 @@ function Bid({role, id, navigate, setBid, bid}) {
 
   return (
     <div className='bid'>
-      {role === "CLIENT" ? (
+      {role.role === "CLIENT" ? (
         <>
           <div className='bid__panel'>
             <Link className='bid__addLink' to="/addbid">Отправить заявку</Link>
@@ -91,10 +122,14 @@ function Bid({role, id, navigate, setBid, bid}) {
             <p className='bid__info'>{item.price}</p>
             <p className='bid__info'>{item.status}</p>
             <p className='bid__info'>{item.msg}</p>
-            <button className='btn delete-btn' onClick={() => deleteBid(item.id)}>Отменить</button>
+            {item.document ? (<>
+              <button className='btn delete-btn' onClick={() => saveDocument(item.document)}>Сохранить</button>
+            </>) : <>
+              <button className='btn delete-btn' onClick={() => deleteBid(item.id)}>Отменить</button>
+            </>}
           </div>)}
         </>
-      ):( role === "MANAGER" ? (
+      ):( role.role === "MANAGER" ? (
         <>
             <div className='bid__panel'>
               <div className='bid__btnSorts'>
@@ -116,6 +151,14 @@ function Bid({role, id, navigate, setBid, bid}) {
               <p className='bid__info'>{item.price}</p>
               <p className='bid__info'>{item.status}</p>
               <a className='btn read-btn' onClick={()=>changeStatus(item.id)}>Просмотреть</a>
+              {item.status === 'утверждена' ? (
+                item.document ? (<>
+                  <button className='btn update-btn' onClick={() => saveDocument(item.document)}>Сохранить</button>
+                </>) : <>
+                  <button className='btn read-btn' onClick={()=>createDocument(item.id)}><HiOutlineDocumentPlus/></button>
+                </>
+                ):(<></>)
+              }
             </div>)}
         </>
       ) : (
@@ -142,6 +185,9 @@ function Bid({role, id, navigate, setBid, bid}) {
               <p className='bid__info'>{item.price}</p>
               <p className='bid__info'>{item.status}</p>
               <Link className='btn read-btn' to = {"/bid/details/" + item.id}>Просмотреть</Link>
+              {item.document ? (<>
+                <button className='btn delete-btn' onClick={() => saveDocument(item.document)}>Сохранить</button>
+              </>) : <></>}
             </div>)}
         </>
       )

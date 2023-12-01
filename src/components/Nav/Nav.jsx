@@ -11,7 +11,7 @@ function Nav({role, setInfoNull, navigate, location}) {
                     <Link className={location.pathname === '/authorization' ? 'nav__item active' : 'nav__item' } to="/authorization">Войти</Link>
                 </>
             ) : (
-                role === "CLIENT" ? (
+                role.role === "CLIENT" ? (
                     <>
                         <Link className={location.pathname === '/' ? 'nav__item active' : 'nav__item' } to="/">Главная</Link>
                         <Link className={location.pathname === '/person' ? 'nav__item active' : 'nav__item' } to="/person">Личный кабинет</Link>
@@ -19,7 +19,7 @@ function Nav({role, setInfoNull, navigate, location}) {
                         <button className='btn delete-btn' onClick={()=>{setInfoNull(); navigate('/')}}>Выйти</button>
                     </>
                 ) : (
-                    role === "ADMIN" ? (
+                    role.role === "ADMIN" ? (
                         <>
                             <Link className={location.pathname === '/' ? 'nav__item active' : 'nav__item' } to="/">Главная</Link>
                             <Link className={location.pathname === '/person' ? 'nav__item active' : 'nav__item' } to="/person">Личный кабинет</Link>
