@@ -56,8 +56,8 @@ function Bid({role, id, navigate, setBid, bid}) {
   let createDocument = (id) =>{
     Axios.post('http://localhost:9090/app/document/createDocument', {id:id}).then((response)=>{
       if(response.data.status === "success") {
-        navigate("/bid")
         getBid();
+        navigate("/bid")
       }
       else{
           navigate('/error')
@@ -103,7 +103,7 @@ function Bid({role, id, navigate, setBid, bid}) {
 
   return (
     <div className='bid'>
-      {role.role === "CLIENT" ? (
+      {role === "CLIENT" ? (
         <>
           <div className='bid__panel'>
             <Link className='bid__addLink' to="/addbid">Отправить заявку</Link>
@@ -129,7 +129,7 @@ function Bid({role, id, navigate, setBid, bid}) {
             </>}
           </div>)}
         </>
-      ):( role.role === "MANAGER" ? (
+      ):( role === "MANAGER" ? (
         <>
             <div className='bid__panel'>
               <div className='bid__btnSorts'>

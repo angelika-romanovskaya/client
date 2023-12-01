@@ -10,11 +10,11 @@
     display: flex;
     align-items:  center;
     justify-content: space-between;
-    width: 400px;
+    width: 600px;
     gap: 20px;
 }
 
-.ditails__type, .ditails__info{
+.ditails__type, .ditails__info, .ditails .person__value{
     flex: 1 1 0;
     text-align: left;
     font-size: 18px;

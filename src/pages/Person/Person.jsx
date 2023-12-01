@@ -94,7 +94,7 @@ function Person({role, id, navigate, setUser, setRole}) {
 
   return (
     <div className='person'>
-        {role.role === "ADMIN" ? (
+        {role === "ADMIN" ? (
             <>
                 <div className='person__item'>
                     <span className='person__type'>Логин:</span>
@@ -110,7 +110,7 @@ function Person({role, id, navigate, setUser, setRole}) {
                 </div>
             </>
         ) : (
-            role.role === "CLIENT" ? (
+            role === "CLIENT" ? (
                 <>
                     <div className='person__item'>
                         <span className='person__type'>Фамилия:</span>

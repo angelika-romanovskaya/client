@@ -61,7 +61,7 @@ function App() {
           <Route path='/report' element={<Report navigate={navigate}/>}/>
           {bid.map((item,i) => <Route key={item.id} path={"/bid/details/" + item.id} element={<DitailsBid role = {role} bid={item} navigate = {navigate}/>}/>)}
         </Routes>
-        {role.role === "CLIENT" || role === '' ? (
+        {role === "CLIENT" || role === '' ? (
           <div>
             <Modal login = {login} password={password} navigate = {navigate}/>
           </div>
