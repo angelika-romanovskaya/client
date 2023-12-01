@@ -67,9 +67,9 @@ function Authorization({setRole, navigate, setUser}) {
         <p className='msg'>{msg}</p>
         {msg === "Ваш аккаунт был удален! Желаете вернуть аккаунт?" ? (
             <>
-                <button onClick={() => Yes()}>Да</button>
-                <button onClick={() => No()}>Нет</button>
-                <button onClick={() => Registration()}>Зарегистрировать новый</button>
+                <button className='btn read-btn' onClick={() => Yes()}>Да</button>
+                <button className='btn delete-btn' onClick={() => No()}>Нет</button>
+                <button className='btn update-btn' onClick={() => Registration()}>Зарегистрировать новый</button>
             </>
         ) : (
             <></>
