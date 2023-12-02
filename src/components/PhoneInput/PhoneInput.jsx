@@ -9,7 +9,7 @@ function PhoneInput(props) {
       value={props.value} 
       disabled = {props.disabled}
       onChange={props.onChange}
-      placeholder = 'Введите ваш номер телефона'>
+      placeholder = '*Введите ваш номер телефона'>
     </InputMask>
   )
 }

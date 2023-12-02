@@ -13,6 +13,8 @@ function Person({role, id, navigate, setUser, setRole}) {
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
 
+    const [msg, setMsg] = useState('')
+
     const phoneInput = ({ target: { value } }) => setPhone(value);
     const nameInput = ({ target: { value } }) => setName(value);
     const surnameInput = ({ target: { value } }) => setSurname(value);
@@ -47,34 +49,48 @@ function Person({role, id, navigate, setUser, setRole}) {
     }
 
     const saveInfo = () =>{
-        console.log(role.role)
-        if(role.role === "CLIENT"){
-            Axios.post('http://localhost:9090/app/person/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname, patronymic: patronymic, phone: phone, email: email}).then((response)=>{
-                if(response.data.status === "success") {
-                    setUser(logins, passwords, id);
-                }
-                else{
-                    navigate('/error')
-                };
-            })
-        } else if(role.role === "MANAGER"){
-            Axios.post('http://localhost:9090/app/person/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname, phone: phone}).then((response)=>{
-                if(response.data.status === "success") {
-                    setUser(logins, passwords, id);
-                }
-                else{
-                    navigate('/error')
-                };
-            })
+        if(role === "CLIENT"){
+            if(passwords === '' || logins === '' || name === '' || surname === '' || patronymic === '' || phone === '' || email === ''){
+                setMsg("Поля со * обязательны к заполнению")
+            } else{
+                Axios.post('http://localhost:9090/app/person/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname, patronymic: patronymic, phone: phone, email: email}).then((response)=>{
+                    if(response.data.status === "success") {
+                        setUser(logins, passwords, id);
+                    }
+                    else{
+                        navigate('/error')
+                    };
+                })
+                setMsg('')
+            }
+        } else if(role === "MANAGER"){
+            if(passwords === '' || logins === '' || name === '' || surname === '' || phone === ''){
+                setMsg("Поля со * обязательны к заполнению")
+            } else{
+                Axios.post('http://localhost:9090/app/person/updatepersoninfo', {id:id, role: role, password: passwords, login: logins, name: name, surname: surname, phone: phone}).then((response)=>{
+                    if(response.data.status === "success") {
+                        setUser(logins, passwords, id);
+                    }
+                    else{
+                        navigate('/error')
+                    };
+                })
+                setMsg('')
+            }
         } else{
-            Axios.post('http://localhost:9090/app/person/updatepersoninfo', {id:id, role: role, password: passwords, login: logins}).then((response)=>{
-                if(response.data.status === "success") {
-                    setUser(logins, passwords, id);
-                }
-                else{
-                    navigate('/error')
-                };
-            })
+            if(passwords === '' || logins === ''){
+                setMsg("Поля со * обязательны к заполнению")
+            } else{
+                Axios.post('http://localhost:9090/app/person/updatepersoninfo', {id:id, role: role, password: passwords, login: logins}).then((response)=>{
+                    if(response.data.status === "success") {
+                        setUser(logins, passwords, id);
+                    }
+                    else{
+                        navigate('/error')
+                    };
+                })
+                setMsg('')
+            }
         }
         setDisabled(true);
     }
@@ -97,11 +113,11 @@ function Person({role, id, navigate, setUser, setRole}) {
         {role === "ADMIN" ? (
             <>
                 <div className='person__item'>
-                    <span className='person__type'>Логин:</span>
+                    <span className='person__type'>*Логин:</span>
                     <input className='person__value' disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
                 </div>
                 <div className='person__item'>
-                    <span className='person__type'>Пароль:</span>
+                    <span className='person__type'>*Пароль:</span>
                     <input className='person__value'  disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
                 </div>
                 <div className='person__btn'>
@@ -113,31 +129,31 @@ function Person({role, id, navigate, setUser, setRole}) {
             role === "CLIENT" ? (
                 <>
                     <div className='person__item'>
-                        <span className='person__type'>Фамилия:</span>
+                        <span className='person__type'>*Фамилия:</span>
                         <input className='person__value' disabled = {disabled} type='text' value={surname} onChange={surnameInput}/>
                     </div>
                     <div className='person__item'>
-                        <span className='person__type'>Имя:</span>
+                        <span className='person__type'>*Имя:</span>
                         <input className='person__value' disabled = {disabled} type='text' value={name} onChange={nameInput}/>
                     </div>
                     <div className='person__item'>
-                        <span className='person__type'>Отчество:</span>
+                        <span className='person__type'>*Отчество:</span>
                         <input className='person__value' disabled = {disabled} type='text' value={patronymic} onChange={patronymicInput}/>
                     </div>
                     <div className='person__item'>
-                        <span className='person__type'>E-mail:</span>
+                        <span className='person__type'>*E-mail:</span>
                         <input className='person__value' disabled = {disabled} type='email' value={email} onChange={emailInput}/>
                     </div>
                     <div className='person__item'>
-                        <span className='person__type'>Телефон:</span>
+                        <span className='person__type'>*Телефон:</span>
                         <PhoneInput className='person__value' disabled = {disabled} value={phone} onChange={phoneInput}/>
                     </div>
                     <div className='person__item'>
-                        <span className='person__type'>Логин:</span>
+                        <span className='person__type'>*Логин:</span>
                         <input className='person__value' disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
                     </div>
                     <div className='person__item'>
-                        <span className='person__type'>Пароль:</span>
+                        <span className='person__type'>*Пароль:</span>
                         <input className='person__value'  disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
                     </div>
                     <div className='person__btn'>
@@ -149,23 +165,23 @@ function Person({role, id, navigate, setUser, setRole}) {
             ) : (
                 <>
                     <div className='person__item'>
-                        <span className='person__type'>Фамилия:</span>
+                        <span className='person__type'>*Фамилия:</span>
                         <input className='person__value' disabled = {disabled} type='text' value={surname} onChange={surnameInput}/>
                     </div>
                     <div className='person__item'>
-                        <span className='person__type'>Имя:</span>
+                        <span className='person__type'>*Имя:</span>
                         <input className='person__value' disabled = {disabled} type='text' value={name} onChange={nameInput}/>
                     </div>
                     <div className='person__item'>
-                        <span className='person__type'>Телефон:</span>
+                        <span className='person__type'>*Телефон:</span>
                         <PhoneInput className='person__value' disabled = {disabled} value={phone} onChange={phoneInput}/>
                     </div>
                     <div className='person__item'>
-                        <span className='person__type'>Логин:</span>
+                        <span className='person__type'>*Логин:</span>
                         <input className='person__value' disabled = {disabled} type='text' value={logins} onChange={loginsInput}/>
                     </div>
                     <div className='person__item'>
-                        <span className='person__type'>Пароль:</span>
+                        <span className='person__type'>*Пароль:</span>
                         <input className='person__value'  disabled = {disabled} type='password' value={passwords} onChange={passwordsInput}/>
                     </div>
                     <div className='person__btn'>
@@ -175,6 +191,7 @@ function Person({role, id, navigate, setUser, setRole}) {
                 </>
             )
         )}
+        <p className='msg'>{msg}</p>
     </div>
   )
 }

@@ -7,19 +7,26 @@ function DitailsBid({bid, navigate, role}) {
     const [msg, setMsg] = useState('');
     const [day, setDay] = useState(0);
     const [price, setPrice] = useState(0);
+    const [m, setM] = useState('')
+    console.log(bid)
 
     let approveBid = (item) =>{
         if(role === "MANAGER"){
-            let date = new Date(item.data_start);
-            date.setDate(new Date(item.data_start).getDate() + +day);
-            Axios.post('http://localhost:9090/app/bid/approveBid', {id: item.id, msg:msg, role:role, data_end: formatDate(date), price:price}).then((response)=>{
-                if(response.data.status === "success") {
-                    navigate("/bid")
-                }
-                else{
-                    navigate('/error')
-                };
-            })
+            if(day == '' || price == ''){
+                setM("Поля со * обязательны к заполнению")
+            } else{
+                let date = new Date(item.data_start);
+                date.setDate(new Date(item.data_start).getDate() + +day);
+                Axios.post('http://localhost:9090/app/bid/approveBid', {id: item.id, msg:msg, role:role, data_end: formatDate(date), price:price}).then((response)=>{
+                    if(response.data.status === "success") {
+                        navigate("/bid")
+                    }
+                    else{
+                        navigate('/error')
+                    };
+                })
+                setM('')
+            }
         } else{
             Axios.post('http://localhost:9090/app/bid/approveBid', {id: item.id, msg:msg, role:role}).then((response)=>{
                 if(response.data.status === "success") {
@@ -41,10 +48,6 @@ function DitailsBid({bid, navigate, role}) {
                 navigate('/error')
             };
         })
-    }
-
-    let generetionDocument = (item) =>{
-
     }
 
   return (
@@ -98,14 +101,15 @@ function DitailsBid({bid, navigate, role}) {
             {bid.statusId === 10 || bid.statusId === 11 ? (
                 <>
                     <div className='ditails__item'>
-                        <span className='ditails__type'>Цена выполнения: </span>
+                        <span className='ditails__type'>*Цена выполнения: </span>
                         <input className='person__value' type='number' step={0.01} onChange={(event) => {setPrice(event.target.value)}}/> 
                     </div>
                     <div className='ditails__item'>
-                        <span className='ditails__type'>Количество требуемых дней: </span>
+                        <span className='ditails__type'>*Количество требуемых дней: </span>
                         <input className='person__value' type='number' min={1} max={100} onChange={(event) => {setDay(event.target.value)}}/>
                     </div>
                     <textarea className='person__value' placeholder='Введите сообщение для клиента' onChange={(event)=>{setMsg(event.target.value)}}/>
+                    <p className='msg'>{m}</p>
                     <button className='btn read-btn' onClick={() => approveBid(bid)}>Одобрить</button>
                     <button className='btn delete-btn' onClick={() => rejectBid(bid.id)}>Отклонить</button>
                 </>
@@ -120,6 +124,41 @@ function DitailsBid({bid, navigate, role}) {
             )
             )}
         </>
+        ) : ( role === "CLIENT" ? (
+            <>
+                <div className='ditails__item'>
+                    <span className='ditails__type'>Имя менеджера: </span>
+                    <p className='ditails__info'>{bid.name}</p>
+                </div>
+                <div className='ditails__item'>
+                    <span className='ditails__type'>Фамилия менеджера: </span>
+                    <p className='ditails__info'>{bid.surname}</p>
+                </div>
+                <div className='ditails__item'>
+                    <span className='ditails__type'>Дата подачи заявки: </span>
+                    <p className='ditails__info'>{bid.data_start}</p>
+                </div>
+                <div className='ditails__item'>
+                    <span className='ditails__type'>Дата окончания выполнения: </span>
+                    <p className='ditails__info'>{bid.data_end ? bid.data_end : '-'}</p>
+                </div>
+                <div className='ditails__item'>
+                    <span className='ditails__type'>Тип заявки: </span>
+                    <p className='ditails__info' >{bid.type}</p>
+                </div>
+                <div className='ditails__item'>
+                    <span className='ditails__type'>Описание заявки: </span>
+                    <p className='ditails__info'>{bid.description}</p>
+                </div>
+                <div className='ditails__item'>
+                    <span className='ditails__type'>Стоимость услуги: </span>
+                    <p className='ditails__info'>{bid.price ? bid.price : '-'}</p>
+                </div>
+                <div className='ditails__item'>
+                    <span className='ditails__type'>Статус заявки: </span>
+                    <p className='ditails__info'>{bid.status}</p>
+                </div>
+            </>
         ) : (
             <>
                 <div className='ditails__item'>
@@ -178,6 +217,7 @@ function DitailsBid({bid, navigate, role}) {
                 <button className='btn read-btn' onClick={() => approveBid(bid)}>Утвердить</button>
                 <button className='btn delete-btn' onClick={() => rejectBid(bid.id)}>Отклонить</button>
             </>
+        )
         )}
     </div>
   )

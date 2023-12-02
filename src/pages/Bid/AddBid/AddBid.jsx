@@ -7,6 +7,7 @@ function AddBid({navigate, id}) {
     const [type, setType] = useState('')
     const [typeUser, setTypeUser] = useState('')
     const [description, setDescription] = useState('')
+    const [msg, setMsg] = useState('')
 
     let setChecked = (event) =>{
         if(event.target.checked){
@@ -15,19 +16,23 @@ function AddBid({navigate, id}) {
     }
 
     const AddBid = () => {
-        Axios.post('http://localhost:9090/app/bid/addbid', {id: id, type: type, description:description, typeUser: typeUser, dataStart: formatDate(new Date())}).then((response)=>{
-            if(response.data.status === "success"){
-                navigate('/')
-            } else{
-                navigate('/error')
-            }
-        })
+        if(type === '' || typeUser === '') {
+            setMsg('Поля со * обязательны к заполнению')
+        } else{
+            Axios.post('http://localhost:9090/app/bid/addbid', {id: id, type: type, description:description, typeUser: typeUser, dataStart: formatDate(new Date())}).then((response)=>{
+                if(response.data.status === "success"){
+                    navigate('/')
+                } else{
+                    navigate('/error')
+                }
+            })
+        }
     };
 
   return (
     <div className='form'>
         <fieldset className='form__type'>
-            <legend className='form__legend'>Выберите кем вы являетесь:</legend>
+            <legend className='form__legend'>*Выберите кем вы являетесь:</legend>
 
             <div className='form__wrap'>
                 <div>
@@ -46,9 +51,10 @@ function AddBid({navigate, id}) {
                 </div>
             </div>
         </fieldset>
-        <input className='person__value' type="text" placeholder='Введите краткое описание задачи' onChange={(event)=>{setType(event.target.value)}}/>
+        <input className='person__value' type="text" placeholder='*Введите краткое описание задачи' onChange={(event)=>{setType(event.target.value)}}/>
         <textarea className='person__value'  col = "30" row = "20" placeholder='Введите дополнительную информацию' onChange={(event)=>{setDescription(event.target.value)}}/>
         <button className='btn read-btn' onClick={AddBid}>Отправить</button>
+        <p className='msg'>{msg}</p>
     </div>
   )
 }

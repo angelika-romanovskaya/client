@@ -16,6 +16,7 @@ function Nav({role, setInfoNull, navigate, location}) {
                         <Link className={location.pathname === '/' ? 'nav__item active' : 'nav__item' } to="/">Главная</Link>
                         <Link className={location.pathname === '/person' ? 'nav__item active' : 'nav__item' } to="/person">Личный кабинет</Link>
                         <Link className={location.pathname === '/bid' ? 'nav__item active' : 'nav__item' } to="/bid">Заявки</Link>
+                        <Link className={location.pathname === '/chart' ? 'nav__item active' : 'nav__item' } to="/chart">Статистика</Link>
                         <button className='btn delete-btn' onClick={()=>{setInfoNull(); navigate('/')}}>Выйти</button>
                     </>
                 ) : (

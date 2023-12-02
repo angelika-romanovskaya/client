@@ -6,7 +6,9 @@ import { GrPowerReset } from "react-icons/gr";
 import { FaSortAlphaDown } from "react-icons/fa";
 import { FaSortAlphaUp } from "react-icons/fa";
 import { HiOutlineDocumentPlus } from "react-icons/hi2";
+import { FaFileDownload } from "react-icons/fa";
 import {saveAs} from 'file-saver'
+import { MdDelete } from "react-icons/md";
 
 function Bid({role, id, navigate, setBid, bid}) {
   const filterOption = useRef();
@@ -113,19 +115,15 @@ function Bid({role, id, navigate, setBid, bid}) {
             </div>
           </div>
           {filterData.map((item,i) => <div className='bid__item' key={item.id}>
-            <p className='bid__info'>{item.name}</p>
-            <p className='bid__info'>{item.surname}</p>
             <p className='bid__info'>{item.type}</p>
-            <p className='bid__info'>{item.description}</p>
-            <p className='bid__info'>{item.data_start}</p>
-            <p className='bid__info'>{item.data_end}</p>
-            <p className='bid__info'>{item.price}</p>
+            <p className='bid__info'>{item.data_end ? item.data_end : '-'}</p>
+            <p className='bid__info'>{item.price ? item.price : '-'}</p>
             <p className='bid__info'>{item.status}</p>
-            <p className='bid__info'>{item.msg}</p>
+            <Link className='btn read-btn' to = {"/bid/details/" + item.id}>Просмотреть</Link>
             {item.document ? (<>
-              <button className='btn delete-btn' onClick={() => saveDocument(item.document)}>Сохранить</button>
+              <button className='btn save-btn' onClick={() => saveDocument(item.document)}><FaFileDownload /></button>
             </>) : <>
-              <button className='btn delete-btn' onClick={() => deleteBid(item.id)}>Отменить</button>
+              <button className='btn delete-btn' onClick={() => deleteBid(item.id)}><MdDelete /></button>
             </>}
           </div>)}
         </>
@@ -148,16 +146,18 @@ function Bid({role, id, navigate, setBid, bid}) {
               <p className='bid__info'>{item.surname}</p>
               <p className='bid__info'>{item.type}</p>
               <p className='bid__info'>{item.type_user}</p>
-              <p className='bid__info'>{item.price}</p>
+              <p className='bid__info'>{item.price ? item.price : '-'}</p>
               <p className='bid__info'>{item.status}</p>
               <a className='btn read-btn' onClick={()=>changeStatus(item.id)}>Просмотреть</a>
               {item.status === 'утверждена' ? (
                 item.document ? (<>
-                  <button className='btn update-btn' onClick={() => saveDocument(item.document)}>Сохранить</button>
+                  <button className='btn update-btn' onClick={() => saveDocument(item.document)}><FaFileDownload /></button>
                 </>) : <>
-                  <button className='btn read-btn' onClick={()=>createDocument(item.id)}><HiOutlineDocumentPlus/></button>
+                  <button className='btn read-btn' onClick={()=>createDocument(item.id)}><HiOutlineDocumentPlus /></button>
                 </>
-                ):(<></>)
+                ):(<>
+                <button style={{opacity: 0}} className='btn update-btn'>ds</button>
+                </>)
               }
             </div>)}
         </>
@@ -183,10 +183,9 @@ function Bid({role, id, navigate, setBid, bid}) {
               <p className='bid__info'>{item.type}</p>
               <p className='bid__info'>{item.type_user}</p>
               <p className='bid__info'>{item.price}</p>
-              <p className='bid__info'>{item.status}</p>
               <Link className='btn read-btn' to = {"/bid/details/" + item.id}>Просмотреть</Link>
               {item.document ? (<>
-                <button className='btn delete-btn' onClick={() => saveDocument(item.document)}>Сохранить</button>
+                <button className='btn delete-btn' onClick={() => saveDocument(item.document)}><FaFileDownload /></button>
               </>) : <></>}
             </div>)}
         </>

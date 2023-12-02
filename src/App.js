@@ -57,7 +57,7 @@ function App() {
           <Route path='/calls' element={<Calls navigate = {navigate}/>}/>
           <Route path='/addbid' element={<AddBid id={id} navigate = {navigate}/>}/>
           <Route path='/summary' element={<Summary navigate = {navigate}/>}/>
-          <Route path='/chart' element={<Chart navigate={navigate} role={role}/>}/>
+          <Route path='/chart' element={<Chart navigate={navigate} role={role} id={id}/>}/>
           <Route path='/report' element={<Report navigate={navigate}/>}/>
           {bid.map((item,i) => <Route key={item.id} path={"/bid/details/" + item.id} element={<DitailsBid role = {role} bid={item} navigate = {navigate}/>}/>)}
         </Routes>

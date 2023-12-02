@@ -9,6 +9,8 @@ function Modal({login, password, navigate}) {
     const [theme, setTheme] = useState('')
     const [phone, setPhone] = useState('')
 
+    const [msg, setMsg] = useState('')
+
     const phoneInput = ({ target: { value } }) => setPhone(value);
 
     const openModal = ()=>{
@@ -19,13 +21,33 @@ function Modal({login, password, navigate}) {
     }
 
     const addBell = ()=>{
-        Axios.post('http://localhost:9090/app/bell/addBell', {password: password, login: login, theme: theme, phone: phone}).then((response)=>{
-            if(response.data.status === "success") {}
-            else{
-                navigate('/error')
-            };
-            setActive(false);
-        })
+        if(password === '' && login === ''){
+            if(theme === '' || phone === ''){
+                setMsg('Поля со * обязательны к заполнению')
+            } else{
+                Axios.post('http://localhost:9090/app/bell/addBell', {password: password, login: login, theme: theme, phone: phone}).then((response)=>{
+                    if(response.data.status === "success") {}
+                    else{
+                        navigate('/error')
+                    };
+                    setActive(false);
+                })
+                setMsg('')
+            }
+        } else{
+            if(theme === ''){
+                setMsg('Поля со * обязательны к заполнению')
+            } else {
+                Axios.post('http://localhost:9090/app/bell/addBell', {password: password, login: login, theme: theme, phone: phone}).then((response)=>{
+                    if(response.data.status === "success") {}
+                    else{
+                        navigate('/error')
+                    };
+                    setActive(false);
+                })
+                setMsg('')
+            }
+        }
     }
 
   return (
@@ -38,8 +60,9 @@ function Modal({login, password, navigate}) {
                 {password === '' && login === '' ? (
                     <PhoneInput value={phone} onChange={phoneInput}/>
                 ):(<></>)}
-                <textarea placeholder='Ваше сообщение' name="theme" id="theme" cols="30" rows="10" style={{resize: false}} onChange={(event)=>{setTheme(event.target.value)}}></textarea>
+                <textarea placeholder='*Ваше сообщение' name="theme" id="theme" cols="30" rows="10" style={{resize: false}} onChange={(event)=>{setTheme(event.target.value)}}></textarea>
                 <button className='modal__btn' onClick={addBell}>Подать заявку на звонок</button>
+                <p className='msg'>{msg}</p>
             </div>
         </ReactModal>
     </div>
